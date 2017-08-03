@@ -90,7 +90,7 @@
             // 
             this.button4.Image = ((System.Drawing.Image)(resources.GetObject("button4.Image")));
             this.button4.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.button4.Location = new System.Drawing.Point(13, 293);
+            this.button4.Location = new System.Drawing.Point(13, 291);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(214, 44);
             this.button4.TabIndex = 4;
