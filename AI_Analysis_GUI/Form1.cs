@@ -48,6 +48,7 @@ namespace AI_Analysis_GUI
             PictureBox pb = (PictureBox)this.Controls.Find("MainImageBox", true)[0];
             pb.Image = bitmap;
             pb.SizeMode = PictureBoxSizeMode.StretchImage;
+            //pb.Refresh();
         }
         private void ShowImage(CImage image)
         {
@@ -145,7 +146,7 @@ namespace AI_Analysis_GUI
                     System.Drawing.Imaging.PixelFormat.Format24bppRgb, m_cVideoFrame.pData);
 
                 ShowImage(cvt_bitmap);
-                Thread.Sleep(1);
+                Thread.Sleep(25);
             }
 
             m_bIsCapture = false;

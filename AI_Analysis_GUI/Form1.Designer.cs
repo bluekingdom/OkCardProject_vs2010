@@ -51,6 +51,9 @@
             // 
             // MainImageBox
             // 
+            this.MainImageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.MainImageBox.BackColor = System.Drawing.SystemColors.Window;
             this.MainImageBox.Location = new System.Drawing.Point(215, 12);
             this.MainImageBox.Name = "MainImageBox";
@@ -202,13 +205,17 @@
             // 
             // Form1
             // 
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1019, 616);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.MainImageBox);
             this.Name = "Form1";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "B超乳腺癌分析";
             ((System.ComponentModel.ISupportInitialize)(this.MainImageBox)).EndInit();
             this.panel1.ResumeLayout(false);
