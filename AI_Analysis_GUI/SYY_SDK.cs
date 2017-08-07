@@ -79,11 +79,11 @@ namespace SYY
     public class SDK
     {
 
-#if DEBUG
-        const string Dll_Name = "MedicalAnalysisSDK_x64_d.dll";
-#else
+//#if DEBUG
+        //const string Dll_Name = "MedicalAnalysisSDK_x64_d.dll";
+//#else
         const string Dll_Name = "MedicalAnalysisSDK_x64.dll";
-#endif
+//#endif
 
         [DllImport(Dll_Name, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public extern static ErrorCode InitSDK();

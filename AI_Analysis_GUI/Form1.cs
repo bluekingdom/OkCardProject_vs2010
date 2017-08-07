@@ -20,7 +20,7 @@ namespace AI_Analysis_GUI
         public ulong hOkCardSDKHandle;
         public ErrorCode error_code = ErrorCode.SYY_NO_ERROR;
         Bitmap m_Bitmap;
-        CImage m_cVideoFrame;
+        CImage m_cVideoFrame, m_cFrameShow;
         public Thread m_videoCaptureThread { get; set; }
         public bool m_bIsCapture { get; set; }
         public Thread m_okCardCaptrueThread { get; set; }
@@ -101,6 +101,7 @@ namespace AI_Analysis_GUI
         {
             ErrorCode error_code;
             BUAnalysisResult result = new BUAnalysisResult();
+            CImage temp = new CImage();
 
             ulong hHandle = 0;
 
@@ -113,6 +114,10 @@ namespace AI_Analysis_GUI
 
             while (m_bIsCapture)
             {
+                temp = m_cFrameShow;
+                m_cFrameShow = m_cVideoFrame;
+                m_cVideoFrame = temp;
+
                 error_code = SDK.GetVideoFrame(hVideoHandle, ref m_cVideoFrame);
                 if (error_code != ErrorCode.SYY_NO_ERROR)
                 {
@@ -142,11 +147,11 @@ namespace AI_Analysis_GUI
                     break;
                 }
 
-                Bitmap cvt_bitmap = new Bitmap(m_cVideoFrame.nWidth, m_cVideoFrame.nHeight, m_cVideoFrame.nChannels * m_cVideoFrame.nWidth,
-                    System.Drawing.Imaging.PixelFormat.Format24bppRgb, m_cVideoFrame.pData);
+                Bitmap show_bitmap = (new Bitmap(m_cVideoFrame.nWidth, m_cVideoFrame.nHeight, m_cVideoFrame.nChannels * m_cVideoFrame.nWidth,
+                    System.Drawing.Imaging.PixelFormat.Format24bppRgb, m_cVideoFrame.pData));
 
-                ShowImage(cvt_bitmap);
-                Thread.Sleep(25);
+                ShowImage(show_bitmap);
+                Thread.Sleep(1);
             }
 
             m_bIsCapture = false;
@@ -161,6 +166,8 @@ namespace AI_Analysis_GUI
                 return;
 
             m_cVideoFrame = new CImage();
+            m_cFrameShow = new CImage();
+
             IntPtr strPtr = Marshal.StringToHGlobalAnsi(video_file);
 
             error_code = SDK.LoadVideo(strPtr, video_file.Length, ref hVideoHandle, ref m_cVideoFrame);
@@ -172,6 +179,8 @@ namespace AI_Analysis_GUI
 
             m_cVideoFrame.pData = Marshal.AllocHGlobal(m_cVideoFrame.nHeight * m_cVideoFrame.nWidth * m_cVideoFrame.nChannels);
 
+            m_cFrameShow = m_cVideoFrame;
+            m_cFrameShow.pData = Marshal.AllocHGlobal(m_cVideoFrame.nHeight * m_cVideoFrame.nWidth * m_cVideoFrame.nChannels);
         }
 
         private void ButtonAnalysisVideo_Click(object sender, EventArgs e)
