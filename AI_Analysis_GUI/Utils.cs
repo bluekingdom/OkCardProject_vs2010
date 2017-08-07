@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Windows.Forms;
 using System.Reflection;
+using System.Xml;
 
 namespace Utils
 {
@@ -57,6 +58,52 @@ namespace Utils
             }
             return (T)retval;
         }
+    };
+
+    public class XMLParser
+    {
+        private XmlDocument m_cXmlReader = new XmlDocument();
+        private string m_sXmlFilePath;
+
+        public bool Load(string xml_file)
+        {
+            m_sXmlFilePath = xml_file;
+            try {
+                m_cXmlReader.Load(xml_file);
+            }
+            catch (Exception e) 
+            {
+                throw e;
+            }
+
+            return true;
+        }
+
+        public void Save()
+        {
+            try {
+                m_cXmlReader.Save(m_sXmlFilePath);
+            }
+            catch (Exception e) 
+            {
+                throw e;
+            }
+        }
+
+        public int GetValueInt(string first_key, string secord_key)
+        {
+            try
+            {
+                XmlNode node = m_cXmlReader["config"][first_key];
+                string val = node[secord_key].InnerXml;
+                return Int16.Parse(val);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     };
 
 }

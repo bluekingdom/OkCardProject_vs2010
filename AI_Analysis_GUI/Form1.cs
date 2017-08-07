@@ -26,6 +26,11 @@ namespace AI_Analysis_GUI
         public Thread m_okCardCaptrueThread { get; set; }
         public bool m_bIsAnalysisOkCardCapture { get; set; }
 
+        public const string sc_sCfgFile = "config.cfg";
+        public XMLParser m_xmlParser;
+        public int m_nSleepNum;
+        public int m_nSkipFrameNum;
+
         public Form1()
         {
             InitializeComponent();
@@ -41,6 +46,11 @@ namespace AI_Analysis_GUI
                 MessageBox.Show("初始化模型失败.");
                 return;
             }
+
+            m_xmlParser = new XMLParser();
+            m_xmlParser.Load(sc_sCfgFile);
+            m_nSkipFrameNum = m_xmlParser.GetValueInt("video", "skipFrameNum");
+            m_nSleepNum = m_xmlParser.GetValueInt("video", "sleepNum");
         }
 
         private void ShowImage(Bitmap bitmap)
@@ -112,11 +122,11 @@ namespace AI_Analysis_GUI
                 return;
             }
 
+            int frameCount = 0;
+
             while (m_bIsCapture)
             {
-                temp = m_cFrameShow;
-                m_cFrameShow = m_cVideoFrame;
-                m_cVideoFrame = temp;
+                frameCount += 1;
 
                 error_code = SDK.GetVideoFrame(hVideoHandle, ref m_cVideoFrame);
                 if (error_code != ErrorCode.SYY_NO_ERROR)
@@ -131,6 +141,13 @@ namespace AI_Analysis_GUI
                     }
 
                     break;
+                }
+
+
+                if (m_nSkipFrameNum > 0)
+                {
+                    if (frameCount % (m_nSkipFrameNum + 1) != 0)
+                        continue;
                 }
 
                 error_code = SDK.ExecuteBUAnalysisFromImage(hHandle, m_cVideoFrame, ref result);
@@ -151,7 +168,11 @@ namespace AI_Analysis_GUI
                     System.Drawing.Imaging.PixelFormat.Format24bppRgb, m_cVideoFrame.pData));
 
                 ShowImage(show_bitmap);
-                Thread.Sleep(1);
+                Thread.Sleep(m_nSleepNum);
+
+                temp = m_cFrameShow;
+                m_cFrameShow = m_cVideoFrame;
+                m_cVideoFrame = temp;
             }
 
             m_bIsCapture = false;
@@ -278,6 +299,11 @@ namespace AI_Analysis_GUI
         {
             m_bIsCapture = false;
             m_bIsAnalysisOkCardCapture = false;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
 
 
